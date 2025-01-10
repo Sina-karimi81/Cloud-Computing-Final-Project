@@ -1,0 +1,17 @@
+db:
+  appName: postgres
+  service:
+    master:
+      name: master-svc
+    slave:
+      name: slave-svc
+  pv:
+    name: postgres-volume
+  pvc:
+    name: postgres-volume-claim
+  config:
+    name: postgres-conf
+  container:
+    name: postgres
+    image: postgres:10.1
+    pullPolicy: IfNotPresent

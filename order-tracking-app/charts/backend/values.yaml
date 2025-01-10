@@ -1,0 +1,35 @@
+appName: order-tracking-app
+
+backend_name: spring-backend
+
+namespace: default
+
+imagePullPolicy: IfNotPresent
+
+server:
+  containerName: order-tracking-container
+  port: 8080
+  image: sinak2002/order-tracking
+  tag: v1
+
+service:
+  port: 8080
+  targetPort: 8080
+  type: ClusterIP
+
+configmap:
+  name: backend-conf
+  data:
+    master_db_url: jdbc:postgresql://master-svc:5432/
+    slave_db_url: jdbc:postgresql://slave-svc:5432/
+    master_entity_generate: none
+    slave_entity_generate: none
+    port: 8080
+
+secrets:
+  name: backend-secrets
+  data:
+    master_user: "postgres"
+    master_pass: "postgres"
+    slave_user: "postgres"
+    slave_pass: "postgres"

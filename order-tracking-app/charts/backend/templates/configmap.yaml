@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configmap.name }}
+  namespace: {{ .Values.namespace }}
+data:
+  WRITE_HOST: "{{ .Values.configmap.data.master_db_url}}"
+  READ_HOST: "{{ .Values.configmap.data.slave_db_url }}"
+  SERVER_PORT: "{{ .Values.configmap.data.port }}"
+  MASTER_ENTITY_GENERATE: "{{ .Values.configmap.data.master_entity_generate }}"
+  SLAVE_ENTITY_GENERATE: "{{ .Values.configmap.data.slave_entity_generate }}"

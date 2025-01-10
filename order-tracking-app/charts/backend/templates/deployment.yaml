@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: "{{.Values.appName}}-backend-deployment"
+
+  labels:
+    app: {{ .Values.backend_name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.backend_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.backend_name }}
+    spec:
+      containers:
+        - name: {{ .Values.server.containerName }}
+          image: "{{ .Values.server.image }}:{{ .Values.server.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.server.port }}
+          env:
+            - name: WRITE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.name }}
+                  key: WRITE_HOST
+            - name: WRITE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: WRITE_USERNAME
+            - name: WRITE_PASSWORD
+              value: postgres
+            - name: READ_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.name }}
+                  key: READ_HOST
+            - name: READ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.name }}
+                  key: READ_USERNAME
+            - name: READ_PASSWORD
+              value: postgres
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.name }}
+                  key: SERVER_PORT
+            - name: MASTER_ENTITY_GENERATE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.name }}
+                  key: MASTER_ENTITY_GENERATE
+            - name: SLAVE_ENTITY_GENERATE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.configmap.name }}
+                  key: SLAVE_ENTITY_GENERATE
+      imagePullSecrets:
+        - name: regcred
