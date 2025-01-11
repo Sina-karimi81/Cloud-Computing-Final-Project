@@ -14,16 +14,12 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderDAO orderDAO;
-    private boolean tableCreated = false;
 
     public OrderService(OrderDAO orderDAO) {
         this.orderDAO = orderDAO;
     }
 
     public Long createOrder(OrderDTO orderDTO) {
-        if (!tableCreated) {
-            createTable();
-        }
         log.info("creating a new order for userId {} and product name {}", orderDTO.getUserId(), orderDTO.getProductName());
         Order order = Order.builder()
                 .userId(orderDTO.getUserId())
@@ -40,9 +36,6 @@ public class OrderService {
     }
 
     public void updateOrderStatus(Long orderId, Status newStatus) {
-        if (!tableCreated) {
-            createTable();
-        }
         log.info("updating order with id {} to status {}", orderId, newStatus.name());
         Order order = orderDAO.findById(orderId);
         order.setStatus(newStatus.name());
@@ -51,33 +44,8 @@ public class OrderService {
     }
 
     public Optional<Order> getOrderStatus(Long orderId) {
-        if (!tableCreated) {
-            createTable();
-        }
         log.info("Fetching Order with id {}", orderId);
         Order order = orderDAO.findById(orderId);
         return Optional.of(order);
-    }
-
-    private void createTable() {
-        log.info("starting to create the table for the db, created {}", tableCreated);
-        String sql = """
-                CREATE TABLE IF NOT EXISTS ORDER_TB(
-                  id SERIAL PRIMARY KEY,
-                  user_id BIGINT,
-                  prod_count BIGINT,
-                  product_name VARCHAR(255),
-                  address VARCHAR(255),
-                  status VARCHAR(255)
-                );
-                """;
-
-        try {
-//            orderDAO.executeQuery(sql);
-            tableCreated = true;
-        } catch (Exception e) {
-            log.error("failed to create the table", e);
-        }
-        log.info("finished to create the table for the db and set tableCreated to {}", tableCreated);
     }
 }
