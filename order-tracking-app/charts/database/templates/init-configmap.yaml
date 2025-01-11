@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.db.appName }}-init-sql
+  name: {{ .Values.db.appName.master.name }}-init-sql
   labels:
-    app: {{ .Values.db.appName }}
+    app: {{ .Values.db.appName.master.name }}
 data:
   init.sql: |
+    create user replicator with replication encrypted password 'replicator_password';
+    select pg_create_physical_replication_slot('replication_slot');
     CREATE TABLE IF NOT EXISTS order_tb(
         id SERIAL PRIMARY KEY,
         user_id BIGINT,

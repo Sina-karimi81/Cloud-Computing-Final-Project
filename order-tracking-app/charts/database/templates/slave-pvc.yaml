@@ -1,11 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.db.pvc.name }}
+  name: {{ .Values.db.pvc.slave.name }}
   labels:
-    app: {{ .Values.db.appName }}
+    app: {{ .Values.db.appName.slave.name }}
 spec:
-  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:

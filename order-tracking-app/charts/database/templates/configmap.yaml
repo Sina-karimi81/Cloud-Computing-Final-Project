@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.db.config.name }}
+  name: {{ .Values.db.config.master.name }}
   labels:
-    app: {{ .Values.db.appName }}
+    app: {{ .Values.db.appName.master.name }}
 data:
   POSTGRES_DB: "postgres"
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "postgres"
+  POSTGRES_HOST_AUTH_METHOD: "scram-sha-256\nhost replication all 0.0.0.0/0 md5"
+  POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.db.appName.master.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.db.appName.master.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.db.appName.master.name }}
+    spec:
+      containers:
+        - name: {{ .Values.db.appName.master.name }}
+          image: "{{ .Values.db.container.image }}:{{ .Values.db.container.version }}"
+          imagePullPolicy: {{ .Values.db.container.pullPolicy }}
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.db.config.master.name }}
+          args:
+            - "postgres"
+            - "-c"
+            - "wal_level=replica"
+            - "-c"
+            - "hot_standby=on"
+            - "-c"
+            - "max_wal_senders=10"
+            - "-c"
+            - "max_replication_slots=10"
+            - "-c"
+            - "hot_standby_feedback=on"
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: init-sql
+          configMap:
+            name: {{ .Values.db.appName.master.name }}-init-sql
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: {{ .Values.db.pvc.master.name }}

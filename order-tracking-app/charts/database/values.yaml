@@ -1,16 +1,29 @@
 db:
-  appName: postgres
+  appName:
+    master:
+      name: master-postgres
+    slave:
+      name: slave-postgres
   service:
     master:
       name: master-svc
     slave:
       name: slave-svc
   pv:
-    name: postgres-volume
+    master:
+      name: master-postgres-volume
+    slave:
+      name: slave-postgres-volume
   pvc:
-    name: postgres-volume-claim
+    master:
+      name: master-postgres-volume-claim
+    slave:
+      name: slave-postgres-volume-claim
   config:
-    name: postgres-conf
+    master:
+      name: master-postgres-conf
+    slave:
+      name: slave-postgres-conf
   container:
     name: postgres
     image: postgres

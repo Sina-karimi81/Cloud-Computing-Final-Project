@@ -10,7 +10,7 @@ server:
   containerName: order-tracking-container
   port: 8080
   image: sinak2002/order-tracking
-  tag: v6
+  tag: v7
 
 service:
   port: 8080
@@ -20,6 +20,8 @@ service:
 configmap:
   name: backend-conf
   data:
+    master_db_service: master-svc
+    slave_db_service: slave-svc
     master_db_url: jdbc:postgresql://master-svc:5432/postgres
     slave_db_url: jdbc:postgresql://slave-svc:5432/postgres
     master_user: postgres

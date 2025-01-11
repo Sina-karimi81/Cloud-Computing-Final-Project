@@ -3,11 +3,12 @@ kind: Service
 metadata:
   name: {{ .Values.db.service.master.name }}
   labels:
-    app: {{ .Values.db.appName }}
+    app: {{ .Values.db.service.master.name }}
 spec:
+  type: NodePort
   ports:
     - port: 5432
       targetPort: 5432
       protocol: TCP
   selector:
-    app: {{ .Values.db.appName }}
+    app: {{ .Values.db.appName.master.name }}

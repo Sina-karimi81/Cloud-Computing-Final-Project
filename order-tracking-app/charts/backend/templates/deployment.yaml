@@ -16,6 +16,29 @@ spec:
       labels:
         app: {{ .Values.backend_name }}
     spec:
+      initContainers:
+        - name: wait-for-master-db
+          image: busybox:1.28
+          command:
+            - "sh"
+            - "-c"
+            - |
+              until nc -z {{ .Values.configmap.data.master_db_service }} 5432; do
+                echo "Waiting for master database to be ready..."
+                sleep 2
+              done
+              echo "Master database is ready!"
+        - name: wait-for-slave-db
+          image: busybox:1.28
+          command:
+            - "sh"
+            - "-c"
+            - |
+              until nc -z {{ .Values.configmap.data.slave_db_service }} 5432; do
+                echo "Waiting for slave database to be ready..."
+                sleep 2
+              done
+              echo "Slave database is ready!"
       containers:
         - name: {{ .Values.server.containerName }}
           image: "{{ .Values.server.image }}:{{ .Values.server.tag }}"
