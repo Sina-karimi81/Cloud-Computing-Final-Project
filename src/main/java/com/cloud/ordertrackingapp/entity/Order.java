@@ -15,17 +15,17 @@ import java.io.Serializable;
 public class Order implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+    @Column(name = "user_id")
     private Long userId;
-    @Column
+    @Column(name = "product_name")
     private String productName;
-    @Column
+    @Column(name = "prod_count")
     private Integer count;
-    @Column
+    @Column(name = "address")
     private String address;
-    @Column
+    @Column(name = "status")
     private String status;
 
 }

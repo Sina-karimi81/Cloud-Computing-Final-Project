@@ -1,12 +1,14 @@
 package com.cloud.ordertrackingapp.config;
 
 import ch.qos.logback.core.util.StringUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -17,41 +19,37 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.Map;
 
-@Configuration
+@Configuration(value = "databaseConfig")
 @EnableJpaRepositories(
         entityManagerFactoryRef = "entityManagerFactory",
         transactionManagerRef = "transactionManager",
         basePackages = {"com.cloud.ordertrackingapp.dao"}
 )
-@Slf4j
 public class DatabaseConfig {
 
-    @Value("${spring.datasource.master.url}")
+    @Value("${WRITE_HOST}")
     private String masterUrl;
-    @Value("${spring.datasource.master.username}")
+    @Value("${WRITE_USERNAME}")
     private String masterUser;
-    @Value("${spring.datasource.master.password}")
+    @Value("${WRITE_PASSWORD}")
     private String masterPassword;
-    @Value("${master.hibernate.ddl-auto}")
-    private String hibernateDdlAuto;
 
-    @Value("${spring.datasource.slave.url}")
+    @Value("${READ_HOST}")
     private String slaveUrl;
-    @Value("${spring.datasource.slave.username}")
+    @Value("${READ_USERNAME}")
     private String slaveUser;
-    @Value("${spring.datasource.slave.password}")
+    @Value("${READ_PASSWORD}")
     private String slavePassword;
-    @Value("${slave.hibernate.ddl-auto}")
-    private String slaveHibernateDdlAuto;
 
     @Primary
     @Bean(name = "masterDataSource")
     public DataSource masterDataSource() {
-        String format = String.format("master url: {} , master user: {} , master password: {}", masterUrl, masterUser, masterPassword);
+        String format = String.format("master date: url= %s, user= %s, password= %s", masterUrl, masterUser, masterPassword);
         System.out.println(format);
-        log.debug("master url: {} , master user: {} , master password: {}", masterUrl, masterUser, masterPassword);
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl(masterUrl);
@@ -62,9 +60,8 @@ public class DatabaseConfig {
 
     @Bean(name = "slaveDataSource")
     public DataSource slaveDataSource() {
-        String format = String.format("slave url: {} , slave user: {} , slave password: {}", masterUrl, masterUser, masterPassword);
+        String format = String.format("slave date: url= %s, user= %s, password= %s", slaveUrl, slaveUser, slavePassword);
         System.out.println(format);
-        log.debug("slave url: {} , slave user: {} , slave password: {}", masterUrl, masterUser, masterPassword);
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl(slaveUrl);
@@ -82,7 +79,6 @@ public class DatabaseConfig {
                 .dataSource(dataSource)
                 .packages("com.cloud.ordertrackingapp.entity")
                 .persistenceUnit("master")
-                .properties(Map.of(Environment.HBM2DDL_AUTO, hibernateDdlAuto))
                 .build();
     }
 
@@ -102,7 +98,6 @@ public class DatabaseConfig {
                 .dataSource(dataSource)
                 .packages("com.cloud.ordertrackingapp.entity")
                 .persistenceUnit("slave")
-                .properties(Map.of(Environment.HBM2DDL_AUTO, slaveHibernateDdlAuto))
                 .build();
     }
 

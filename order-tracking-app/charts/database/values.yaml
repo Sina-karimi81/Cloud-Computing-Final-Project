@@ -13,5 +13,6 @@ db:
     name: postgres-conf
   container:
     name: postgres
-    image: postgres:10.1
+    image: postgres
+    version: 14-alpine
     pullPolicy: IfNotPresent

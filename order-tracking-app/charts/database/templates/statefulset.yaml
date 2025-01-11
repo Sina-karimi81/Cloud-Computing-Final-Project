@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.db.container.name }}
-          image: {{ .Values.db.container.image }}
+          image: "{{ .Values.db.container.image }}:{{ .Values.db.container.version }}"
           imagePullPolicy: {{ .Values.db.container.pullPolicy }}
           ports:
             - containerPort: 5432
@@ -25,7 +25,12 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgredb
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
+        - name: init-sql
+          configMap:
+            name: {{ .Values.db.appName }}-init-sql
         - name: postgredb
           persistentVolumeClaim:
             claimName: {{ .Values.db.pvc.name }}
