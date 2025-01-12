@@ -6,8 +6,10 @@ metadata:
   labels:
     app: {{ .Values.backend_name }}
 spec:
+  type: LoadBalancer
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
   selector:
     app: {{ .Values.backend_name }}

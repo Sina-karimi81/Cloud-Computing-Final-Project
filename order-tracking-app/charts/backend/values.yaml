@@ -10,7 +10,7 @@ server:
   containerName: order-tracking-container
   port: 8080
   image: sinak2002/order-tracking
-  tag: v7
+  tag: latest
 
 service:
   port: 8080
