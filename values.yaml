@@ -1,0 +1,6 @@
+gitlabUrl: "http://gitlab.cloud.com:80"
+runnerRegistrationToken: "glrt-t1_TBchV3pjaTwcsG7QW965"
+rbac:
+  create: true
+runners:
+  privileged: true
