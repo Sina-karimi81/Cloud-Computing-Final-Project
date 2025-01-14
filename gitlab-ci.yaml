@@ -1,0 +1,26 @@
+stages:
+  - build
+  - push
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+# مرحله ساخت داكر ايميج
+build:
+  stage: build
+  script:
+    - echo "Building Docker image..."
+    - docker build -t $IMAGE_TAG .
+  only:
+    - main  # اجرای pipeline فقط زمانی که کامیت به شاخه main انجام شود.
+
+# مرحله ورود به رجيسترى GitLab و ارسال ايميج
+push:
+  stage: push
+  script:
+    - echo "Logging into GitLab registry..."
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - echo "Pushing Docker image..."
+    - docker push $IMAGE_TAG
+  only:
+    - main  # اجرای این مرحله فقط برای کامیت‌های موجود در شاخه main
