@@ -4,16 +4,19 @@ services:
     container_name: gitlab
     restart: always
     platform: linux/amd64
-    hostname: 'gitlab.cloud.com'
     environment:
+      GITLAB_ROOT_EMAIL: "admin@cloud.com"
+      GITLAB_ROOT_PASSWORD: "Abcd@0123456789"
       GITLAB_OMNIBUS_CONFIG: |
-        # Add any other gitlab.rb configuration here, each on its own line
-        external_url 'https://gitlab.cloud.com'
-        puma['worker_processes']=0
+        nginx['redirect_http_to_https'] = false
+        nginx['ssl_certificate'] = "..."
+        nginx['ssl_certificate_key'] = "..."
+        prometheus_monitoring['enable'] = false
+        alertmanager['enable'] = false
+        puma['worker_processes'] = 2
+        sidekiq['max_concurrency'] = 10
     ports:
-      - '80:80'
-      - '443:443'
-      - '22:22'
+      - '8000:8000'
     volumes:
       - gitlab_config:/etc/gitlab
       - gitlab_logs:/var/log/gitlab
