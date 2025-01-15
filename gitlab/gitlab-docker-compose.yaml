@@ -22,9 +22,22 @@ services:
       - gitlab_logs:/var/log/gitlab
       - gitlab_data:/var/opt/gitlab
 
-    shm_size: '8gb'
+    shm_size: '4gb'
     privileged: true
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:alpine
+    container_name: gitlab-runner
+    network_mode: 'host'
+    depends_on:
+      - gitlab
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - runner-c:/etc/gitlab-runner
+
 volumes:
   gitlab_config:
   gitlab_logs:
   gitlab_data:
+  runner-c:
