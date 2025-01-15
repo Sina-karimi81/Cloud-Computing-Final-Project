@@ -8,7 +8,7 @@ services:
       GITLAB_ROOT_EMAIL: "admin@cloud.com"
       GITLAB_ROOT_PASSWORD: "Abcd@0123456789"
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://localhost:8000'
+        external_url 'http://gitlab:8000'
         nginx['listen_port'] = 8000
         nginx['redirect_http_to_https'] = false
         nginx['ssl_certificate'] = "..."
@@ -30,7 +30,7 @@ services:
   gitlab-runner:
     image: gitlab/gitlab-runner:alpine
     container_name: gitlab-runner
-    network_mode: 'host'
+    network_mode: 'gitlab_default'
     depends_on:
       - gitlab
     restart: always

@@ -4,3 +4,14 @@ rbac:
   create: true
 runners:
   privileged: true
+  serviceAccount.name: default
+
+imagePullPolicy: IfNotPresent
+concurrent:  4
+
+image:
+  registry: docker.io
+  image: gitlab/gitlab-runner
+  tag: alpine
+
+replicas: 1

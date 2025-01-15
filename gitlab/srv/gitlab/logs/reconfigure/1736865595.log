@@ -1,0 +1,12 @@
+# Logfile created on 2025-01-14 14:39:55 +0000 by logger.rb/v1.5.3
+[2025-01-14T14:39:56+00:00] INFO: Started Cinc Zero at chefzero://localhost:1 with repository at /opt/gitlab/embedded (One version per cookbook)
+[2025-01-14T14:39:56+00:00] INFO: *** Cinc Client 18.3.0 ***
+[2025-01-14T14:39:56+00:00] INFO: Platform: x86_64-linux
+[2025-01-14T14:39:56+00:00] INFO: Cinc-client pid: 111
+[2025-01-14T14:39:59+00:00] INFO: Setting the run_list to ["recipe[gitlab]"] from CLI options
+[2025-01-14T14:39:59+00:00] INFO: Run List is [recipe[gitlab]]
+[2025-01-14T14:39:59+00:00] INFO: Run List expands to [gitlab]
+[2025-01-14T14:39:59+00:00] INFO: Starting Cinc Client Run for gitlab.cloud.com
+[2025-01-14T14:39:59+00:00] INFO: Running start handlers
+[2025-01-14T14:39:59+00:00] INFO: Start handlers complete.
+[2025-01-14T14:40:02+00:00] INFO: Loading cookbooks [gitlab@0.0.1, package@0.1.0, logrotate@0.1.0, postgresql@0.1.0, redis@0.1.0, monitoring@0.1.0, registry@0.1.0, mattermost@0.1.0, consul@0.1.0, gitaly@0.1.0, praefect@0.1.0, gitlab-kas@0.1.0, gitlab-pages@0.1.0, letsencrypt@0.1.0, nginx@0.1.0, runit@5.1.7, acme@4.1.6, crond@0.1.0]
