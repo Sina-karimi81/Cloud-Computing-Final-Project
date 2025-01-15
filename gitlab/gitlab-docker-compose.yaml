@@ -15,7 +15,7 @@ services:
         nginx['ssl_certificate_key'] = "..."
         prometheus_monitoring['enable'] = false
         alertmanager['enable'] = false
-        puma['worker_processes'] = 2
+        puma['worker_processes'] = 0
         sidekiq['max_concurrency'] = 10
     ports:
       - '8000:8000'
