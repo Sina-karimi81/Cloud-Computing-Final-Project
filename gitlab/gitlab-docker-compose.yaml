@@ -22,8 +22,17 @@ services:
         postgresql['shared_buffers'] = "256MB"
         postgresql['work_mem'] = "16MB"
         redis['maxmemory'] = "512mb"
+        registry_external_url 'http://gitlab:8090'
+        gitlab_rails['registry_enabled'] = true
+        gitlab_rails['registry_host'] = 'gitlab'
+        gitlab_rails['registry_port'] = '8090'
+        gitlab_rails['registry_api_url'] = 'http://localhost:8090'
+        gitlab_rails['registry_key_path'] = '/etc/gitlab/ssl/gitlab-registry.key'
+        gitlab_rails['registry_path'] = '/var/opt/gitlab/gitlab-rails/shared/registry'
+        registry_nginx['enable'] = false
     ports:
       - '8000:8000'
+      - '8090:8090'
     volumes:
       - gitlab_config:/etc/gitlab
       - gitlab_logs:/var/log/gitlab

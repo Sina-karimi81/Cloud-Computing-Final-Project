@@ -1,0 +1,32 @@
+variables:
+  CUSTOM_REGISTRY: "registry.gitlab.com"
+  DOCKER_CLIENT_TIMEOUT: 300
+  COMPOSE_HTTP_TIMEOUT: 300
+
+stages:
+  - build
+  - push
+
+build:
+  stage: build
+  image: docker:latest
+  script:
+    - unset DOCKER_HOST
+    - echo "Building Docker image..."
+    - docker build -t "$CUSTOM_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}" .
+    - echo "build completed"
+  only:
+    - main
+
+push:
+  stage: push
+  image: docker:latest
+  script:
+    - unset DOCKER_HOST
+    - echo "Logging into GitLab registry..."
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
+    - echo "Pushing Docker image..."
+    - docker push "$CUSTOM_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}"
+    - echo "push completed"
+  only:
+    - main
