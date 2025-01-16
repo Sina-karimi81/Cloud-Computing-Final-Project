@@ -13,10 +13,15 @@ services:
         nginx['redirect_http_to_https'] = false
         nginx['ssl_certificate'] = "..."
         nginx['ssl_certificate_key'] = "..."
+        nginx['worker_processes'] = 2
         prometheus_monitoring['enable'] = false
         alertmanager['enable'] = false
-        puma['worker_processes'] = 0
+        puma['worker_processes'] = 2
+        puma['threads_per_worker'] = 2
         sidekiq['max_concurrency'] = 10
+        postgresql['shared_buffers'] = "256MB"
+        postgresql['work_mem'] = "16MB"
+        redis['maxmemory'] = "512mb"
     ports:
       - '8000:8000'
     volumes:
