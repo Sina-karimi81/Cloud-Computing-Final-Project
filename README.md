@@ -12,9 +12,9 @@ This project is a **cloud-native order tracking application** built using **Java
 ## API Endpoints  
 | Method | Endpoint | Description |  
 |--------|------------------------|-----------------------------|  
-| `POST` | `/register-orders` | Register a new order |  
-| `PUT` | `/approve-reject-order` | Approve or reject an order |  
-| `GET` | `/check-order-status/{orderId}` | Check the status of an order |  
+| `POST` | `/orders/submit` | Register a new order |  
+| `PUT` | `/orders/{orderId}/status` | Approve or reject an order |  
+| `GET` | `/orders/{orderId}` | Check the status of an order |  
 
 ## Technologies Used  
 - **Java 17**, **Spring Boot**  
